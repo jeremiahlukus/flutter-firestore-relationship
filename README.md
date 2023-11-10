@@ -35,6 +35,22 @@ The Firestore database includes a `playlist` collection with playlist documents.
 
 The `song` collection includes song documents. Each song document's ID corresponds to an ID in a playlist's `songIds` array.
 
+
+ ![simulator_screenshot_41898BCA-5D6F-45A8-A583-D089F231A405](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/5fa5b39f-9257-430d-8128-37d95f376dec)
+
+
+
+
+
+
+![simulator_screenshot_E93D6E9F-6F3A-42A2-B514-CCFAEF0A2499](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/5f927fb2-dafc-4abe-86b7-a9de60b0d767)
+
+
+
+
+
+
+ 
 ## Platforms
 
 The app supports iOS, Android, and macOS. The platform-specific code is in the `ios`, `android`, and `macos` directories.
