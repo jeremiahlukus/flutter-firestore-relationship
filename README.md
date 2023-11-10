@@ -48,9 +48,12 @@ The [song](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.
 
 In addition to these, there is a [users](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/lib/home.dart#144%2C62-144%2C62) collection for storing user-specific data. Each user document in this collection has a [favoriteSongs](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/lib/home.dart#147%2C20-147%2C20) field, which is an array of song IDs. These IDs correspond to the user's favorite songs in the [song](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#3%2C115-3%2C115) collection.
 
-![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 13 33 15](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/310b81ea-48ce-4abd-b4b2-d82f61efdf99)
-![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 13 33 19](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/7535294a-7a52-4645-9af6-858faf7b5d23)
-![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 13 33 26](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/00f6c105-bf36-45ca-95cc-946f0b81e28a)
+
+# Live Demo
+
+https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/f57023af-2eb0-4266-82e8-daeadf2748c9
+
+
 
 
 ## Platforms
