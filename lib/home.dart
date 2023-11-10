@@ -41,19 +41,23 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _isLoading = true; // Set loading to true when start fetching
     });
-    // Fetch the songIds from the playlist document
+
     final playlistDoc = await FirebaseFirestore.instance.collection('playlist').doc(playlistName).get();
     List<String> songIds = List<String>.from(playlistDoc.data()?['songIds'] ?? []);
-    // Determine the range of songIds to fetch
+
     int endIndex = min(_lastFetchedIndex + 20, songIds.length);
     List<String> songIdsToFetch = songIds.sublist(_lastFetchedIndex, endIndex);
-    // Fetch each song with the songIds and add them to the songs list
+
     for (var songId in songIdsToFetch) {
       final songDoc = await FirebaseFirestore.instance.collection('song').doc(songId).get();
-      setState(() {
-        songs.add(songDoc);
-      });
+      if (!songs.any((song) => song.id == songId)) {
+        // Check if song is already in the list
+        setState(() {
+          songs.add(songDoc);
+        });
+      }
     }
+
     _lastFetchedIndex = endIndex; // Update the last fetched index
     setState(() {
       _isLoading = false; // Set loading to false when done fetching
@@ -77,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _scrollListener() {
-    if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+    if (_scrollController.position.pixels >= _scrollController.position.maxScrollExtent - 50) {
       fetchSongs();
     }
   }
