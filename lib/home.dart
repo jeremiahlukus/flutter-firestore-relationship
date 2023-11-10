@@ -86,14 +86,73 @@ class _HomeScreenState extends State<HomeScreen> {
   static const List<String> playListArray = <String>[
     'AthensSongBook',
     'Hymnal',
+    'Favorite Songs',
   ];
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
       playlistName = playListArray[index];
+      _lastFetchedIndex = 0;
       songs = [];
     });
-    fetchSongs();
+    playlistName == 'Favorite Songs' ? fetchFavoriteSongs() : fetchSongs();
+  }
+
+  void fetchFavoriteSongs() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      final userDoc = await FirebaseFirestore.instance.collection('users').doc(user.uid).get();
+      List<String> favoriteSongIds = List<String>.from(userDoc.data()?['favoriteSongs'] ?? []);
+
+      for (var songId in favoriteSongIds) {
+        final songDoc = await FirebaseFirestore.instance.collection('song').doc(songId).get();
+        if (songDoc.exists) {
+          setState(() {
+            songs.add(songDoc);
+          });
+        }
+      }
+    }
+  }
+
+  /// Adds or removes a song from the user's favorite songs list.
+  ///
+  /// This method first checks if the current user is not null. If the user is null,
+  /// it means the user is not signed in, and the method returns immediately.
+  ///
+  /// If the user is signed in, the method fetches the user's document from Firestore.
+  /// It then retrieves the user's favorite songs list from the document data.
+  ///
+  /// If the song ID is already in the favorite songs list, it means the song is currently
+  /// favorited by the user. In this case, the method removes the song ID from the list
+  /// by calling `update` on the user document with `FieldValue.arrayRemove`.
+  ///
+  /// If the song ID is not in the favorite songs list, it means the song is not currently
+  /// favorited by the user. In this case, the method adds the song ID to the list
+  /// by calling `update` on the user document with `FieldValue.arrayUnion`.
+  ///
+  /// After updating the favorite songs list, the method calls `setState` to trigger a rebuild
+  /// of the widget. This updates the UI to reflect the new favorite status of the song.
+  void addSongToFavorites(String songId) async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final userDoc = FirebaseFirestore.instance.collection('users').doc(user.uid);
+      DocumentSnapshot userSnapshot = await userDoc.get();
+      Map<String, dynamic> userData = userSnapshot.data() as Map<String, dynamic>;
+      List<String> favoriteSongs = List<String>.from(userData['favoriteSongs'] ?? []);
+      if (favoriteSongs.contains(songId)) {
+        await userDoc.update({
+          'favoriteSongs': FieldValue.arrayRemove([songId])
+        });
+      } else {
+        await userDoc.update({
+          'favoriteSongs': FieldValue.arrayUnion([songId])
+        });
+      }
+      // Make the favorite songs outline change in realtime
+      setState(() {});
+    }
   }
 
   @override
@@ -160,10 +219,10 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Icon(Icons.business),
             label: 'Hymnal',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.business),
-          //   label: 'Favorite Songs',
-          // ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Favorite Songs',
+          ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.amber[800],
@@ -234,8 +293,31 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                         );
                       },
-                      child: ListTile(
-                        title: Text(song['title']),
+                      child: FutureBuilder<DocumentSnapshot>(
+                        future: FirebaseFirestore.instance
+                            .collection('users')
+                            .doc(FirebaseAuth.instance.currentUser?.uid)
+                            .get(),
+                        builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            List<String> favoriteSongs = List<String>.from(
+                                (snapshot.data?.data() as Map<String, dynamic>)?['favoriteSongs'] ?? []);
+
+                            return ListTile(
+                              title: Text(song['title']),
+                              trailing: IconButton(
+                                icon: favoriteSongs.contains(songs[index].id)
+                                    ? Icon(Icons.favorite)
+                                    : Icon(Icons.favorite_border),
+                                onPressed: () => addSongToFavorites(songs[index].id),
+                              ),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Text("Error: ${snapshot.error}");
+                          }
+                          // By default, show a loading spinner.
+                          return CircularProgressIndicator();
+                        },
                       ),
                     );
                   }
