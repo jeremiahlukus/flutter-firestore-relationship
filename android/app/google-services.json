@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "231008603096",
+    "project_id": "firebase-test-jeremiah",
+    "storage_bucket": "firebase-test-jeremiah.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:231008603096:android:ea3a8893e99a71b18100ad",
+        "android_client_info": {
+          "package_name": "com.example.firebase"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHFvjEuo-Fj5NSbAQeQBMZURXGl_7eL2c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
