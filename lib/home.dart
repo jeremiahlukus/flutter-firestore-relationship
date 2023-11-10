@@ -69,13 +69,27 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = true; // Set loading to true when start fetching
     });
 
-    // Fetch the songs that have the search term in their keywords
+    // Fetch the songs that have the search term in their keywords or songNumber
     final songQuerySnapshot = await FirebaseFirestore.instance
         .collection('song')
         .where('titleSubstrings', arrayContains: searchTerm.toLowerCase())
         .get();
-    setState(() {
+
+    // Try to parse the search term to an integer
+    int? songNumber = int.tryParse(searchTerm);
+    print(songNumber);
+    // If the search term is a valid integer, search by songNumber
+    if (songNumber != null) {
+      final songNumberQuerySnapshot =
+          await FirebaseFirestore.instance.collection('song').where('song_number', isEqualTo: songNumber).get();
+
+      // Combine the results of the two queries
+      songs = songQuerySnapshot.docs + songNumberQuerySnapshot.docs;
+    } else {
       songs = songQuerySnapshot.docs;
+    }
+
+    setState(() {
       _isLoading = false; // Set loading to false when done fetching
     });
   }
@@ -92,6 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
     'Hymnal',
     'Favorite Songs',
   ];
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
