@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _lastFetchedIndex = 0;
   List<DocumentSnapshot> songs = [];
   bool _isLoading = false;
+  String playlistName = 'AthensSongBook';
 
   @override
   void initState() {
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = true; // Set loading to true when start fetching
     });
     // Fetch the songIds from the playlist document
-    final playlistDoc = await FirebaseFirestore.instance.collection('playlist').doc('AthensSongBook').get();
+    final playlistDoc = await FirebaseFirestore.instance.collection('playlist').doc(playlistName).get();
     List<String> songIds = List<String>.from(playlistDoc.data()?['songIds'] ?? []);
     // Determine the range of songIds to fetch
     int endIndex = min(_lastFetchedIndex + 20, songIds.length);
@@ -79,6 +80,20 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       fetchSongs();
     }
+  }
+
+  int _selectedIndex = 0;
+  static const List<String> playListArray = <String>[
+    'AthensSongBook',
+    'Hymnal',
+  ];
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+      playlistName = playListArray[index];
+      songs = [];
+    });
+    fetchSongs();
   }
 
   @override
@@ -135,6 +150,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
     // addSongsToFirestore();
     return Scaffold(
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'AthensSongBook',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.business),
+            label: 'Hymnal',
+          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.business),
+          //   label: 'Favorite Songs',
+          // ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.amber[800],
+        onTap: _onItemTapped,
+      ),
       appBar: AppBar(
         title: TextField(
           controller: _searchController,
@@ -180,10 +214,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: Column(
           children: [
-            Text(
-              'Welcomes!',
-              style: Theme.of(context).textTheme.displaySmall,
-            ),
             const SignOutButton(),
             Expanded(
               child: ListView.builder(
