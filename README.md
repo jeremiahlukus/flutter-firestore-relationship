@@ -10,6 +10,7 @@ This is a Flutter application that fetches and displays songs from a Firebase Fi
 - Implements infinite scrolling by fetching and displaying 20 songs at a time.
 - Displays a loading indicator while fetching new songs.
 - On tap of a song, navigates to a detailed page displaying its lyrics.
+- Provides a search bar to search for songs by title. The search is case-insensitive and can match any part of the title.
 
 ## Setup
 
