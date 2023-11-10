@@ -51,7 +51,10 @@ In addition to these, there is a [users](file:///Users/jeremiah.parrack/freelanc
 
 # Live Demo
 
-https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/f57023af-2eb0-4266-82e8-daeadf2748c9
+
+
+
+https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/c37e8d4a-f41f-4f61-9940-909ac44d28b5
 
 
 
