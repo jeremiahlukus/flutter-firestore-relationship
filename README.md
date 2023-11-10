@@ -37,17 +37,9 @@ The Firestore database includes a `playlist` collection with playlist documents.
 The `song` collection includes song documents. Each song document's ID corresponds to an ID in a playlist's `songIds` array.
 
 
- ![simulator_screenshot_41898BCA-5D6F-45A8-A583-D089F231A405](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/5fa5b39f-9257-430d-8128-37d95f376dec)
-
-
-
-
-
-
-![simulator_screenshot_E93D6E9F-6F3A-42A2-B514-CCFAEF0A2499](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/5f927fb2-dafc-4abe-86b7-a9de60b0d767)
-
-
-
+![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 11 10 18](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/bc4e4219-3d28-4eac-ac9d-0ac525a31a6c)
+![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 11 10 28](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/69eeacac-ac28-4283-a09d-e5a1d7d2c1db)
+![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 11 10 38](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/de83fedf-b719-48d6-adf8-5d58b375c6c3)
 
 
 
