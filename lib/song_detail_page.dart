@@ -15,21 +15,23 @@ class SongDetailPage extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            Text(
-              song['title'],
-              style: Theme.of(context).textTheme.headline5,
-            ),
-            SizedBox(height: 20.0),
-            Text(
-              song['lyrics'],
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ],
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                song['title'],
+                style: Theme.of(context).textTheme.headline5,
+              ),
+              SizedBox(height: 20.0),
+              Text(
+                song['lyrics'],
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+            ],
+          ),
         ),
       ),
     );

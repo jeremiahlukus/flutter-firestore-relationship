@@ -161,8 +161,18 @@ class _HomeScreenState extends State<HomeScreen> {
                     return const Center(child: CircularProgressIndicator());
                   } else {
                     final song = songs[index].data() as Map<String, dynamic>;
-                    return ListTile(
-                      title: Text(song['title']),
+                    return InkWell(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => SongDetailPage(song: song),
+                          ),
+                        );
+                      },
+                      child: ListTile(
+                        title: Text(song['title']),
+                      ),
                     );
                   }
                 },
