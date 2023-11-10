@@ -18,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
+  final TextEditingController _searchController = TextEditingController();
   int _lastFetchedIndex = 0;
   List<DocumentSnapshot> songs = [];
   bool _isLoading = false;
@@ -40,7 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _isLoading = true; // Set loading to true when start fetching
     });
     // Fetch the songIds from the playlist document
-    final playlistDoc = await FirebaseFirestore.instance.collection('playlist').doc('Hymnal').get();
+    final playlistDoc = await FirebaseFirestore.instance.collection('playlist').doc('AthensSongBook').get();
     List<String> songIds = List<String>.from(playlistDoc.data()?['songIds'] ?? []);
     // Determine the range of songIds to fetch
     int endIndex = min(_lastFetchedIndex + 20, songIds.length);
@@ -58,6 +59,22 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void searchSongs(String searchTerm) async {
+    setState(() {
+      _isLoading = true; // Set loading to true when start fetching
+    });
+
+    // Fetch the songs that have the search term in their keywords
+    final songQuerySnapshot = await FirebaseFirestore.instance
+        .collection('song')
+        .where('titleSubstrings', arrayContains: searchTerm.toLowerCase())
+        .get();
+    setState(() {
+      songs = songQuerySnapshot.docs;
+      _isLoading = false; // Set loading to false when done fetching
+    });
+  }
+
   void _scrollListener() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
       fetchSongs();
@@ -67,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     // final user = FirebaseAuth.instance.currentUser;
-    // final userId = user != null ? user.uid : null;
+    // // final userId = user != null ? user.uid : null;
     // List<Map<String, dynamic>> songArray = [];
 
     // Future<List<Map<String, dynamic>>> fetchSongArray() async {
@@ -93,8 +110,18 @@ class _HomeScreenState extends State<HomeScreen> {
     //     final songQuerySnapshot = await songCollection.where('id', isEqualTo: song['id']).get();
 
     //     if (songQuerySnapshot.docs.isEmpty) {
-    //       print('========================');
     //       // If the song doesn't exist, add it to Firestore
+    //       // Generate all substrings of the song title
+    //       String title = song['title'];
+    //       List<String> titleSubstrings = [];
+    //       for (int i = 0; i < title.length; i++) {
+    //         for (int j = i + 1; j <= title.length; j++) {
+    //           titleSubstrings.add(title.substring(i, j).toLowerCase());
+    //         }
+    //       }
+    //       // Add the titleSubstrings to the song
+    //       song['titleSubstrings'] = titleSubstrings;
+
     //       DocumentReference docRef = await songCollection.add(song);
     //       String songId = docRef.id;
     //       print(songId);
@@ -105,10 +132,17 @@ class _HomeScreenState extends State<HomeScreen> {
     //     }
     //   }
     // }
-    //addSongsToFirestore();
 
+    // addSongsToFirestore();
     return Scaffold(
       appBar: AppBar(
+        title: TextField(
+          controller: _searchController,
+          decoration: const InputDecoration(
+            hintText: 'Search songs...',
+          ),
+          onChanged: (value) => searchSongs(value),
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
