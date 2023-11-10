@@ -11,6 +11,8 @@ This is a Flutter application that fetches and displays songs from a Firebase Fi
 - Displays a loading indicator while fetching new songs.
 - On tap of a song, navigates to a detailed page displaying its lyrics.
 - Provides a search bar to search for songs by title. The search is case-insensitive and can match any part of the title.
+- Allows navigation between different playlists.
+- Users can favorite songs, which are then stored and displayed in a separate 'Favorites' list.
 
 ## Setup
 
@@ -36,14 +38,21 @@ The Firestore database includes a `playlist` collection with playlist documents.
 
 The `song` collection includes song documents. Each song document's ID corresponds to an ID in a playlist's `songIds` array.
 
+## Firebase Firestore Structure
+
+The Firestore database includes two main collections: [playlist](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#3%2C131-3%2C131) and [song](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#3%2C115-3%2C115).
+
+The [playlist](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#3%2C131-3%2C131) collection contains playlist documents. Each playlist document has a [songIds](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#37%2C117-37%2C117) field, which is an array of song IDs. The IDs correspond to the documents in the [song](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#3%2C115-3%2C115) collection.
+
+The [song](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#3%2C115-3%2C115) collection contains song documents. Each song document's ID corresponds to an ID in a playlist's [songIds](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#37%2C117-37%2C117) array. The song document includes fields like [title](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#13%2C48-13%2C48), [lyrics](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#12%2C65-12%2C65), and [titleSubstrings](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/lib/home.dart#75%2C17-75%2C17) (used for search functionality).
+
+In addition to these, there is a [users](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/lib/home.dart#144%2C62-144%2C62) collection for storing user-specific data. Each user document in this collection has a [favoriteSongs](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/lib/home.dart#147%2C20-147%2C20) field, which is an array of song IDs. These IDs correspond to the user's favorite songs in the [song](file:///Users/jeremiah.parrack/freelance/guitar_tabs/firebase/README.md#3%2C115-3%2C115) collection.
+
 
 ![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 11 10 18](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/bc4e4219-3d28-4eac-ac9d-0ac525a31a6c)
 ![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 11 10 28](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/69eeacac-ac28-4283-a09d-e5a1d7d2c1db)
 ![Simulator Screenshot - iPhone 15 Plus - 2023-11-10 at 11 10 38](https://github.com/jeremiahlukus/flutter-firestore-relationship/assets/17206638/de83fedf-b719-48d6-adf8-5d58b375c6c3)
 
-
-
- 
 ## Platforms
 
 The app supports iOS, Android, and macOS. The platform-specific code is in the `ios`, `android`, and `macos` directories.
